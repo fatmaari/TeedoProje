@@ -4,6 +4,7 @@ type ProductType = {
     price: number;
     description: string;
     image: string;
+    rating:number;
   };
   
   export type { ProductType };

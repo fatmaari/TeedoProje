@@ -1,48 +1,41 @@
-import { View, Text } from 'react-native'
-import React, { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { ProductType } from '_types/ProductTypes';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setProducts,selectProduct } from 'src/redux/features/product/productSlice';
+import productsdata from 'src/data/data';
+import { selectProducts } from 'src/redux/features/product/productSelector';
+import { addToCard } from 'src/redux/features/card/cardSlice';
 
 
 const useProducts = () => {
-     const navigation= useNavigation<NativeStackNavigationProp<any>>();
-    const products = [
-        {
-            "id": 1,
-            "title": "Essence Mascara Lash Princess",
-            "price": 9.99,
-            "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-            "image":"https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png",
-            "rating": 4.94
-        },
-        {
-            "id": 2,
-            "title": "Eyeshadow Palette with Mirror",
-            "price": 19.99,
-            "description": "The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it's convenient for on-the-go makeup application.",
-            "image":"https://cdn.dummyjson.com/products/images/beauty/Eyeshadow%20Palette%20with%20Mirror/1.png",
-            "rating": 3.28,
-        },
-        {
-            "id": 3,
-            "title": "Powder Canister",
-            "price": 14.99,
-            "description": "The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish.",
-            "image": "https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png",
-            "rating": 3.82,
-        }    
-    ]
+     const navigation = useNavigation<NativeStackNavigationProp<any>>();
+     const dispatch = useDispatch()
+     const productsList = useSelector(selectProducts)
+
+     useEffect(() => {
+      dispatch(setProducts(productsdata));
+    }, []);
+
+    const handleAddToCard =useCallback(
+      (item: ProductType) => {
+      dispatch(addToCard({...item, quantity:1}))// Burada dispatch() kullanılarak Redux Store’a bir action (addToCard) gönderiliyor.
+      //item nesnesinin içine quantity: 1 ekleniyor (ürün sepete ilk defa eklendiğinde miktarı 1 olacak).
+    },[])
+
+
     const handleOnProductPress = useCallback(
         (item: ProductType) => {
-          navigation.navigate( 'ProductsDetail', {products:item });
+          dispatch(selectProduct(item))//
+          navigation.navigate('ProductsDetail');
         },
         [navigation]
       );
   return {
-    products,
+    productsList,
     handleOnProductPress,
+    handleAddToCard,
 };
 }
 

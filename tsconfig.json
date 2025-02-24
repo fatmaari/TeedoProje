@@ -26,6 +26,7 @@
       "_locales/*": ["./src/locales/*"],
       "_modals": ["src/modals"],
       "_navigations/*": ["./src/navigations/*"],
+      "_redux/*": ["./src/redux"],
       "_screens/*": ["./src/screens/*"],
       "_styles/*": ["./src/styles/*"],
       "_types/*": ["./src/types/*"],
@@ -34,3 +35,4 @@
   },
   "exclude": ["node_modules"]
 }
+
